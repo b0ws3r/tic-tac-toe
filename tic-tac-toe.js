@@ -1,11 +1,7 @@
 //user will play tic tac toe with cpu
 //print grid with X or O
 //change grid based on user input
-let playGrid = [
-    [null, null, null]
-    , [null, null, null]
-    , [null, null, null]
-]
+
 
 function addMove(int) {
     const loc = (int % 3) == 0 ? 2 : (int % 3) - 1;
@@ -24,7 +20,8 @@ function addMove(int) {
         pos = [2, loc]
     }
     if (int < 1 || int > 9) {
-        throwErrorMessage();
+        console.log("nope");
+        //throwErrorMessage();
     }
     return pos;
 }
@@ -35,7 +32,8 @@ function returnNewMatrix(pos, currentGrid, player) {
     let gridValue = currentGrid[pos[0]][pos[1]];
     //console.log(gridValue);
     if (gridValue == "X" || gridValue == "O") {
-        throwErrorMessage();
+        //throwErrorMessage();
+        console.log("taken");
         return currentGrid;
     }
     else {
@@ -53,34 +51,40 @@ function nextMove(currentGrid) {
     
     ^^ your next move is the corner...
     check the sums..   
-    check the corners.. 0,0 - 0,2 - 2,0 - 2,2
+    check the corners.. (0,0) - (0,2) - (2,0) - (2, 2)
     */
-    //these are all the sums - wow, such hard code 
-    let thisNextGrid = currentGrid;
-    thisNextGrid.forEach((element, index) => {
+   let newGrid = currentGrid.map((element) => {
         let sum = 0;
         element.map((subElem, i) => {
-            subElem = subElem === 0 ? 1 : 0;
+            //subElem = subElem === 0 && subElem!==null ? 0 : 1; //this just turns everything
+            if(subElem===0){subElem=-1;}
+            if(subElem===1){subElem=1;}
+            if(subElem===null){subElem=0;}
             element[i] = subElem;
         })
-        console.log(element);
+        //console.log(element);
 
         sum = element[0] + element[1] + element[2];
         console.log("This row's sum: " + sum + "\n");
 
-        //while (sum != 2) {
-
-        // sum = currentGrid[0][0] + currentGrid[1][0] + currentGrid[2][0];
-        // sum = currentGrid[0][1] + currentGrid[1][1] + currentGrid[2][1];
-        // sum = currentGrid[0][2] + currentGrid[1][2] + currentGrid[2][2];
-        // sum = currentGrid[0][0] + currentGrid[0][1] + currentGrid[0][2];
-        // sum = currentGrid[1][0] + currentGrid[1][1] + currentGrid[1][2];
-        // sum = currentGrid[2][0] + currentGrid[2][1] + currentGrid[2][2];
-        // sum = currentGrid[0][0] + currentGrid[1][1] + currentGrid[2][2];
-
     });
-
+    return newGrid;
 }
+// function checkMoves(){
+
+//         while (sum != 2) {
+
+//         sum = currentGrid[0][0] + currentGrid[1][0] + currentGrid[2][0];
+//         sum = currentGrid[0][1] + currentGrid[1][1] + currentGrid[2][1];
+//         sum = currentGrid[0][2] + currentGrid[1][2] + currentGrid[2][2];
+//         sum = currentGrid[0][0] + currentGrid[0][1] + currentGrid[0][2];
+//         sum = currentGrid[1][0] + currentGrid[1][1] + currentGrid[1][2];
+//         sum = currentGrid[2][0] + currentGrid[2][1] + currentGrid[2][2];
+//         sum = currentGrid[0][0] + currentGrid[1][1] + currentGrid[2][2];
+        
+//         if (sum!=2) break;
+//         }
+// }
 function printGrid(newGrid) {
     //for 
     /*
@@ -91,9 +95,9 @@ function printGrid(newGrid) {
     newGrid.forEach((element, index) => {//ok, this will print your grid.. but you probably want to map the bits and nulls to the indexes or the 
         console.log(
             element.map((subelement, i) => {
-                if (subelement == 1) { subelement = "X"; }
-                if (subelement == 0) { subelement = "O"; }
-                if (subelement == null) { subelement = (i + 1) + (3 * index); }
+                if (subelement === 1) { subelement = "X"; }
+                if (subelement === 0) { subelement = "O"; }
+                if (subelement === null) { subelement = (i + 1) + (3 * index); }
                 return subelement;
             }).join(' | ') + '\n'
         );
@@ -122,7 +126,11 @@ start()
 
 
 async function start() {
-
+    let playGrid = [
+        [null, null, null]
+        , [null, null, null]
+        , [null, null, null]
+    ]
     let thisPlayer = 1;
     let thisNum = -1;
     let done = 0
@@ -137,8 +145,16 @@ async function start() {
         printGrid(playGrid);
 
         console.log("You chose " + thisNum + ". Above is the current grid. Now it's my turn.");
+        //console.log(playGrid);
+        let thisNextGrid = new Array(3);
+        playGrid.forEach(element=>{
+            let newElem = element.slice(0);
+            thisNextGrid.push(newElem);
+        })
+        //thisNextGrid = playGrid.slice();
+        console.log(thisNextGrid);
+        nextMove(thisNextGrid);
         console.log(playGrid);
-        nextMove(playGrid);
         //switch turn
         thisPlayer = thisPlayer == 1 ? 0 : 1;
         // console.log("player: " + thisPlayer);
